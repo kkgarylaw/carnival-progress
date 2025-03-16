@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>嘉年華進度</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .completed { color: green; }
+        .incomplete { color: red; }
+        #completion-image { display: none; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>嘉年華遊戲進度</h1>
+    <p>掃描每個攤位的二維碼以標記完成。</p>
+    <ul id="stall-list">
+        <li id="stall1">攤位 1: <span class="incomplete">未完成</span></li>
+        <li id="stall2">攤位 2: <span class="incomplete">未完成</span></li>
+        <li id="stall3">攤位 3: <span class="incomplete">未完成</span></li>
+        <li id="stall4">攤位 4: <span class="incomplete">未完成</span></li>
+        <li id="stall5">攤位 5: <span class="incomplete">未完成</span></li>
+        <li id="stall6">攤位 6: <span class="incomplete">未完成</span></li>
+    </ul>
+    <img id="completion-image" src="completion.png" alt="恭喜完成！">
+    <script>
+        // 從 URL 獲取攤位參數
+        const urlParams = new URLSearchParams(window.location.search);
+        const stall = urlParams.get('stall');
+        if (stall) {
+            localStorage.setItem(`stall${stall}`, 'completed');
+        }
+
+        // 更新攤位狀態
+        for (let i = 1; i <= 6; i++) {
+            const status = localStorage.getItem(`stall${i}`);
+            if (status === 'completed') {
+                document.getElementById(`stall${i}`).querySelector('span').textContent = '已完成';
+                document.getElementById(`stall${i}`).querySelector('span').className = 'completed';
+            }
+        }
+
+        // 檢查是否完成所有攤位
+        let allCompleted = true;
+        for (let i = 1; i <= 6; i++) {
+            if (localStorage.getItem(`stall${i}`) !== 'completed') {
+                allCompleted = false;
+                break;
+            }
+        }
+        if (allCompleted) {
+            document.getElementById('completion-image').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
